@@ -17,7 +17,7 @@ public:
 	bool shield;
 
 	// Main Character using the Grabber
-	AActor * Pawn = nullptr;
+	AActor * Pawn;
 
 	// Sets default values for this component's properties
 	UGrabber();

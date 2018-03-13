@@ -19,35 +19,20 @@ UDoorRotation::UDoorRotation()
 void UDoorRotation::BeginPlay()
 {
 	Super::BeginPlay();	
-
-	TotalMass = 0.f;
-
-	Pawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
-	if (!TriggerPlate)
-	{
-		UE_LOG(LogTemp, Error, TEXT("No Trigger Set for %s"), +*(GetOwner()->GetName()));
-	}
 }
 
 float UDoorRotation::GetOverlappingObjectsMass()
 {
 	TotalMass = 0.f;
 	TArray<AActor*> OverlappingActors;
-	if (!TriggerPlate)
+	TriggerPlate->GetOverlappingActors(OverlappingActors);
+	for (auto* Object : OverlappingActors)
 	{
-		return -1;
+		TotalMass += Object->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("Total mass of all the objects is %f"), +TotalMass);
 	}
-	else
-	{
-		TriggerPlate->GetOverlappingActors(OverlappingActors);
-		for (auto* Object : OverlappingActors)
-		{
-			TotalMass += Object->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-			UE_LOG(LogTemp, Warning, TEXT("Total mass of all the objects is %f"), +TotalMass);
-		}
-		return TotalMass;
-	}
+	return TotalMass;
 }
 
 // Called every frame
@@ -57,11 +42,11 @@ void UDoorRotation::TickComponent( float DeltaTime, ELevelTick TickType, FActorC
 
 	if (GetOverlappingObjectsMass() > TriggerMass)
 	{
-	OnOpenRequest.Broadcast();
+		OnDoorOpen.Broadcast();
 	}
-	else 
+	else
 	{
-	OnClosedRequest.Broadcast();
+		OnDoorClosed.Broadcast();
 	}
 }
 

@@ -5,7 +5,7 @@
 #include "Components/ActorComponent.h"
 #include "DoorRotation.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorOpen);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class HEALTHANIMATION_API UDoorRotation : public UActorComponent
@@ -14,23 +14,21 @@ class HEALTHANIMATION_API UDoorRotation : public UActorComponent
 
 public:	
 
+
 	//TriggerVolume used to open the door 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume * TriggerPlate = nullptr;
-
+	// Time in seconds to close the door
 	UPROPERTY(EditAnywhere)
-		float TriggerMass = 30.f;
+		float TriggerMass = 40.f;
 
 	UPROPERTY(BlueprintAssignable)
-		FDoorEvent OnOpenRequest;
-
+		FDoorOpen OnDoorOpen;
 	UPROPERTY(BlueprintAssignable)
-		FDoorEvent OnClosedRequest;
+		FDoorOpen OnDoorClosed;
 
 	// Total Mass of the objects on the trigger plate
 	float TotalMass;
-
-	AActor* Pawn = nullptr;
 
 	// Sets default values for this component's properties
 	UDoorRotation();
