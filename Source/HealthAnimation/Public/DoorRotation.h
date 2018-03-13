@@ -22,6 +22,8 @@ public:
 		float CloseDelay;
 	//Time when player stepped on the Trigger Plate
 	float start;
+	// Total Mass of the objects on the trigger plate
+	float TotalMass;
 
 	AActor* Pawn;
 
@@ -34,6 +36,8 @@ public:
 	void OpenDoor();
 
 	void CloseDoor();
+
+	float GetOverlappingObjectsMass();
 	
 	// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;

@@ -137,12 +137,12 @@ void UGrabber::Release()
 		FActorSpawnParameters SpawnInfo;
 		FVector Location(0.0f, 0.0f, 0.0f);
 		FRotator Rotation(0.0f, 0.0f, 0.0f);
-		FActorSpawnParameters SpawnInfo;
-		GetWorld()->SpawnActor<AProjectile>(Location, Rotation, SpawnInfo);
+//		FActorSpawnParameters SpawnInfo;
+//		GetWorld()->SpawnActor<AProjectile>(Location, Rotation, SpawnInfo);
 		{
 			// Actor has been spawned in the level
 		}
-		else
+	//	else
 		{
 			// Failed to spawn actor!
 		}
@@ -227,20 +227,6 @@ FHitResult UGrabber::TraceForObject()
 void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-	////ViewPoint Location
-	//FVector Location;
-	////ViewPoint Rotation
-	//FRotator Rotation;
-
-	////Assign Current View values every Tick
-	//GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(Location, Rotation);
-	//FVector EndPoint = Location + (Rotation.Vector() * Reach);
-	//if (PhysxHandle->GrabbedComponent)
-	//{
-	//	PhysxHandle->SetTargetLocation(EndPoint);
-	//}
-	
-
 
 }
 

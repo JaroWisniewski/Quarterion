@@ -20,6 +20,8 @@ void UDoorRotation::BeginPlay()
 {
 	Super::BeginPlay();	
 
+	TotalMass = 0.f;
+
 	Pawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 }
@@ -34,21 +36,32 @@ void UDoorRotation::CloseDoor()
 	GetOwner()->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
 }
 
+float UDoorRotation::GetOverlappingObjectsMass()
+{
+	TotalMass = 0.f;
+	TArray<AActor*> OverlappingActors;
+	TriggerPlate->GetOverlappingActors(OverlappingActors);
+	for (auto* Object : OverlappingActors)
+	{
+		TotalMass += Object->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("Total mass %f"), +TotalMass);
+	}
+	return TotalMass;
+}
 
 // Called every frame
 void UDoorRotation::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	if (TriggerPlate->IsOverlappingActor(Pawn))
+	if (GetOverlappingObjectsMass() > 30.0f)
 	{
-		OpenDoor();
-		start = GetWorld()->GetTimeSeconds();
+	OpenDoor();
+	start = GetWorld()->GetTimeSeconds();
 	}
 	if (start + CloseDelay < GetWorld()->GetTimeSeconds())
 	{
 		CloseDoor();
 	}
-	// ...
 }
 
