@@ -16,7 +16,7 @@ public:
 
 	//TriggerVolume used to open the door 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume * TriggerPlate;
+	ATriggerVolume * TriggerPlate = nullptr;
 	// Time in seconds to close the door
 	UPROPERTY(EditAnywhere)
 		float CloseDelay;
@@ -25,7 +25,7 @@ public:
 	// Total Mass of the objects on the trigger plate
 	float TotalMass;
 
-	AActor* Pawn;
+	AActor* Pawn = nullptr;
 
 	// Sets default values for this component's properties
 	UDoorRotation();
