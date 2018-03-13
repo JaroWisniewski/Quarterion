@@ -44,7 +44,7 @@ float UDoorRotation::GetOverlappingObjectsMass()
 	for (auto* Object : OverlappingActors)
 	{
 		TotalMass += Object->FindComponentByClass<UPrimitiveComponent>()->GetMass();
-		UE_LOG(LogTemp, Warning, TEXT("Total mass of all the Objects is %f"), +TotalMass);
+		UE_LOG(LogTemp, Warning, TEXT("Total mass of all the objects is %f"), +TotalMass);
 	}
 	return TotalMass;
 }
