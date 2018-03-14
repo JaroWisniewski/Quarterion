@@ -21,5 +21,8 @@ class HEALTHANIMATION_API UAINextWaypointC : public UBTTaskNode
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Blackboard")
-		struct FBlackboardKeySelector Index;
+		struct FBlackboardKeySelector IndexKey;
+
+	UPROPERTY(EditAnywhere, Category = "Blackboard")
+		struct FBlackboardKeySelector WaypointObject;
 };
