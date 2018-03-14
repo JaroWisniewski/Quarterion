@@ -13,11 +13,4 @@ UCLASS()
 class HEALTHANIMATION_API APatrollingCharacter : public ATP_ThirdPersonCharacter
 {
 	GENERATED_BODY()
-	
-public:
-
-	UPROPERTY(EditInstanceOnly, Category = "Patrol Poooooints")
-		TArray<AActor*>ArrPPoints;
-	
-	
 };

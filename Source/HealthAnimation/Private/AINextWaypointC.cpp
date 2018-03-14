@@ -3,6 +3,7 @@
 #include "HealthAnimation.h"
 #include "AINextWaypointC.h"
 #include "AIController.h"
+#include "PatrolRoute.h"
 #include "PatrollingCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
@@ -10,13 +11,21 @@ EBTNodeResult::Type UAINextWaypointC::ExecuteTask(UBehaviorTreeComponent& OwnerC
 {
 
 	//Get Patrol Points
-	auto AIcontroller = OwnerComp.GetAIOwner();
+	auto Character = OwnerComp.GetAIOwner()->GetPawn();
 
-	auto Character = AIcontroller->GetPawn();
+	auto PatrolRoute = Character->FindComponentByClass<UPatrolRoute>();
 
-	auto PatrollingGuard = Cast<APatrollingCharacter>(Character);
+	if (!ensure(PatrolRoute)) 
+	{
+		return EBTNodeResult::Failed;
+	}
 
-	auto PPoints = PatrollingGuard->ArrPPoints;
+	auto PPoints = PatrolRoute->GetPatrolPoints();
+	if (PPoints.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No Points Selected for character %s"), *(Character->GetName()));
+		return EBTNodeResult::Failed;
+	}
 
 	//Get Next Waypoint
 
