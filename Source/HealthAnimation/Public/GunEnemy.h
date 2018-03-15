@@ -27,16 +27,18 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	/** Fires a virtual projectile. */
-	void OnFire();
-
 public:	
+
+
+	/** Fires a virtual projectile. */
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void OnFire();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<AActor> ProjectileClass;
+		TSubclassOf<class AMyProjectile> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class UAnimInstance* AnimInstance;

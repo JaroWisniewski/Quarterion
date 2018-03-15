@@ -14,7 +14,6 @@ AGunEnemy::AGunEnemy()
 			// Create a gun mesh component
 
 	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
 	FP_Gun->bCastDynamicShadow = false;
 	FP_Gun->CastShadow = false;
 	// FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
@@ -27,7 +26,7 @@ AGunEnemy::AGunEnemy()
 
 void AGunEnemy::OnFire()
 {
-
+	UE_LOG(LogTemp, Error, TEXT("FFFFFIIIRRREEE"));
 	if (ProjectileClass != NULL)
 	{
 		const FRotator SpawnRotation = FP_MuzzleLocation->GetComponentRotation();
@@ -41,7 +40,7 @@ void AGunEnemy::OnFire()
 		if (World != NULL)
 		{
 			// spawn the projectile at the muzzle
-			World->SpawnActor<AActor>(ProjectileClass, SpawnLocation, SpawnRotation);
+			World->SpawnActor<AMyProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 		}
 	}
 
