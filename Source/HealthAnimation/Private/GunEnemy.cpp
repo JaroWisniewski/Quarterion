@@ -3,6 +3,7 @@
 #include "HealthAnimation.h"
 #include "Animation/AnimInstance.h"
 #include "GunEnemy.h"
+#include "MyProjectile.h"
 
 
 
