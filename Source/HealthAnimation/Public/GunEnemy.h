@@ -19,6 +19,9 @@ class HEALTHANIMATION_API AGunEnemy : public AActor
 		UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		 class USceneComponent* FP_MuzzleLocation;
 
+		UPROPERTY(EditAnywhere, Category = "Weapon")
+			float WeaponRange; // Added
+
 public:	
 	// Sets default values for this actor's properties
 	AGunEnemy();

@@ -4,6 +4,7 @@
 #include "Animation/AnimInstance.h"
 #include "GunEnemy.h"
 #include "MyProjectile.h"
+#include "GameFramework/Pawn.h"
 
 
 
@@ -27,7 +28,6 @@ AGunEnemy::AGunEnemy()
 
 void AGunEnemy::OnFire()
 {
-	UE_LOG(LogTemp, Error, TEXT("FFFFFIIIRRREEE"));
 	if (ProjectileClass != NULL)
 	{
 		const FRotator SpawnRotation = FP_MuzzleLocation->GetComponentRotation();
@@ -62,16 +62,16 @@ void AGunEnemy::OnFire()
 	}
 
 
-	/* --------------------------- Calculating Trace Hit and Damage --------------------------------
+	//--------------------------- Calculating Trace Hit and Damage --------------------------------
 	// Now send a trace from the end of our gun to see if we should hit anything
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 
 	// Calculate the direction of fire and the start location for trace
 	FVector CamLoc;
 	FRotator CamRot;
 	PlayerController->GetPlayerViewPoint(CamLoc, CamRot);
 	const FVector ShootDir = CamRot.Vector();
-
+	ACharacter* Pawn = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	FVector StartTrace = FVector::ZeroVector;
 	if (PlayerController)
 	{
@@ -79,14 +79,40 @@ void AGunEnemy::OnFire()
 		PlayerController->GetPlayerViewPoint(StartTrace, UnusedRot);
 
 		// Adjust trace so there is nothing blocking the ray between the camera and the pawn, and calculate distance from adjusted start
-		StartTrace = StartTrace + ShootDir * ((GetActorLocation() - StartTrace) | ShootDir);
+		StartTrace = Pawn->GetActorLocation(); // StartTrace + ShootDir * ((GetActorLocation() - StartTrace) | ShootDir);
+	}
+
+	if (WeaponRange==0)
+	{
+		WeaponRange = 20000;
 	}
 
 	// Calculate endpoint of trace
 	const FVector EndTrace = StartTrace + ShootDir * WeaponRange;
 	
+	FCollisionQueryParams TraceParam(FName(TEXT("WeaponTrace")), true, GetOwner());
+	TraceParam.AddIgnoredActor(this);
+	TraceParam.bTraceAsyncScene = true;
+	TraceParam.bReturnPhysicalMaterial = true;
+	FHitResult Impact;
+
+	GetWorld()->LineTraceSingleByObjectType(
+		Impact,
+		StartTrace,
+		EndTrace,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_GameTraceChannel1), // Collision Channel - have to be set up for PhysicsBody
+		TraceParam
+	);
+	DrawDebugLine(
+		GetWorld(),
+		StartTrace,
+		EndTrace,
+		FColor(255, 0, 0),
+		false, 31, 0,
+		12.333
+	);
 	// Check for impact
-	const FHitResult Impact = WeaponTrace(StartTrace, EndTrace);
+	//const FHitResult Impact = WeaponTrace(StartTrace, EndTrace);
 
 	// Deal with impact
 	AActor* DamagedActor = Impact.GetActor();
@@ -95,9 +121,9 @@ void AGunEnemy::OnFire()
 	// If we hit an actor, with a component that is simulating physics, apply an impulse
 	if ((DamagedActor != NULL) && (DamagedActor != this) && (DamagedComponent != NULL) && DamagedComponent->IsSimulatingPhysics())
 	{
-		DamagedComponent->AddImpulseAtLocation(ShootDir*WeaponDamage, Impact.Location);
+		DamagedComponent->AddImpulseAtLocation(ShootDir * 100, Impact.Location);
+		UE_LOG(LogTemp, Error, TEXT("Hit :: %s"), +*(DamagedActor->GetName()));
 	}
-	*/
 }
 
 // Called when the game starts or when spawned
