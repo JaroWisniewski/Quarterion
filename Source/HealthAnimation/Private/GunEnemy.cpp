@@ -6,8 +6,6 @@
 #include "MyProjectile.h"
 #include "GameFramework/Pawn.h"
 
-
-
 // Sets default values
 AGunEnemy::AGunEnemy()
 {
@@ -75,8 +73,8 @@ void AGunEnemy::OnFire()
 	FVector StartTrace = FVector::ZeroVector;
 	if (PlayerController)
 	{
-		FRotator UnusedRot;
-		PlayerController->GetPlayerViewPoint(StartTrace, UnusedRot);
+		//FRotator UnusedRot;
+		//PlayerController->GetPlayerViewPoint(StartTrace, UnusedRot);
 
 		// Adjust trace so there is nothing blocking the ray between the camera and the pawn, and calculate distance from adjusted start
 		StartTrace = Pawn->GetActorLocation(); // StartTrace + ShootDir * ((GetActorLocation() - StartTrace) | ShootDir);
@@ -90,17 +88,17 @@ void AGunEnemy::OnFire()
 	// Calculate endpoint of trace
 	const FVector EndTrace = StartTrace + ShootDir * WeaponRange;
 	
-	FCollisionQueryParams TraceParam(FName(TEXT("WeaponTrace")), true, GetOwner());
+	FCollisionQueryParams TraceParam(FName(TEXT("WeaponTrace")), false, Pawn);
 	TraceParam.AddIgnoredActor(this);
-	TraceParam.bTraceAsyncScene = true;
-	TraceParam.bReturnPhysicalMaterial = true;
+	//TraceParam.bTraceAsyncScene = true;
+	//TraceParam.bReturnPhysicalMaterial = true;
 	FHitResult Impact;
 
 	GetWorld()->LineTraceSingleByObjectType(
 		Impact,
 		StartTrace,
 		EndTrace,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_GameTraceChannel1), // Collision Channel - have to be set up for PhysicsBody
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), // Collision Channel - have to be set up for PhysicsBody
 		TraceParam
 	);
 	DrawDebugLine(
@@ -118,11 +116,34 @@ void AGunEnemy::OnFire()
 	AActor* DamagedActor = Impact.GetActor();
 	UPrimitiveComponent* DamagedComponent = Impact.GetComponent();
 
-	// If we hit an actor, with a component that is simulating physics, apply an impulse
-	if ((DamagedActor != NULL) && (DamagedActor != this) && (DamagedComponent != NULL) && DamagedComponent->IsSimulatingPhysics())
+	if(DamagedActor == NULL)
 	{
-		DamagedComponent->AddImpulseAtLocation(ShootDir * 100, Impact.Location);
+		UE_LOG(LogTemp, Error, TEXT("Noooothing"));
+	}
+
+	// If we hit an actor, with a component that is simulating physics, apply an impulse
+	if ((DamagedActor != NULL) && (DamagedActor != this) && (DamagedComponent != NULL) /*&& DamagedComponent->IsSimulatingPhysics()*/)
+	{
+	//	DamagedComponent->AddImpulseAtLocation(ShootDir * 100, Impact.Location);
 		UE_LOG(LogTemp, Error, TEXT("Hit :: %s"), +*(DamagedActor->GetName()));
+		if (DamagedComponent->GetName() == "LeftArm")
+		{
+			UE_LOG(LogTemp, Error, TEXT("Hit :: LeftArm"));
+		}
+		else if (DamagedComponent->GetName() == "RightArm")
+		{
+			UE_LOG(LogTemp, Error, TEXT("Hit :: RightArm"));
+		}
+		else if (DamagedComponent->GetName() == "RightLeg")
+		{
+			UE_LOG(LogTemp, Error, TEXT("Hit :: RightLeg"));
+		}
+		else if (DamagedComponent->GetName() == "LeftLeg")
+		{
+			UE_LOG(LogTemp, Error, TEXT("Hit :: LeftLeg"));
+
+		}
+
 	}
 }
 
