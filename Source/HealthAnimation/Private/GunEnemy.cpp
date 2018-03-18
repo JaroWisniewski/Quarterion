@@ -144,6 +144,8 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 
 		}
 
+		//TODO Remove Logs Inside the gun 
+
 	}
 }
 
