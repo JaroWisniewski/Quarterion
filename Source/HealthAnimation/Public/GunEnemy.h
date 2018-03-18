@@ -35,7 +35,7 @@ public:
 
 	/** Fires a virtual projectile. */
 	UFUNCTION(BlueprintCallable, Category = "Input")
-	void OnFire();
+	void OnFire(FHitResult& Hit);
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

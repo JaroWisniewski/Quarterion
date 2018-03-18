@@ -24,7 +24,7 @@ AGunEnemy::AGunEnemy()
 	
 }
 
-void AGunEnemy::OnFire()
+void AGunEnemy::OnFire(FHitResult& Hit)
 {
 	if (ProjectileClass != NULL)
 	{
@@ -111,7 +111,7 @@ void AGunEnemy::OnFire()
 	);
 	// Check for impact
 	//const FHitResult Impact = WeaponTrace(StartTrace, EndTrace);
-
+	Hit = Impact;
 	// Deal with impact
 	AActor* DamagedActor = Impact.GetActor();
 	UPrimitiveComponent* DamagedComponent = Impact.GetComponent();
