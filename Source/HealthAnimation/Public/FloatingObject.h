@@ -15,12 +15,17 @@ public:
 	// Sets default values for this component's properties
 	UFloatingObject();
 
+	AActor* Owner;
+	ACharacter* Pawn;
+	bool active;
+
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
-	// Called every frame
-	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
-		
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable, Category = "Dhield")
+	void toggle();
 	
 };

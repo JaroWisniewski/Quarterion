@@ -39,7 +39,7 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 		if (World != NULL)
 		{
 			// spawn the projectile at the muzzle
-			World->SpawnActor<AMyProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+		//	World->SpawnActor<AMyProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 		}
 	}
 
@@ -106,7 +106,7 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 		StartTrace,
 		EndTrace,
 		FColor(255, 0, 0),
-		false, 31, 0,
+		false, 1, 0,
 		12.333
 	);
 	// Check for impact
@@ -124,27 +124,7 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 	// If we hit an actor, with a component that is simulating physics, apply an impulse
 	if ((DamagedActor != NULL) && (DamagedActor != this) && (DamagedComponent != NULL) /*&& DamagedComponent->IsSimulatingPhysics()*/)
 	{
-	//	DamagedComponent->AddImpulseAtLocation(ShootDir * 100, Impact.Location);
-		UE_LOG(LogTemp, Error, TEXT("Hit :: %s"), +*(DamagedActor->GetName()));
-		if (DamagedComponent->GetName() == "LeftArm")
-		{
-			UE_LOG(LogTemp, Error, TEXT("Hit :: LeftArm"));
-		}
-		else if (DamagedComponent->GetName() == "RightArm")
-		{
-			UE_LOG(LogTemp, Error, TEXT("Hit :: RightArm"));
-		}
-		else if (DamagedComponent->GetName() == "RightLeg")
-		{
-			UE_LOG(LogTemp, Error, TEXT("Hit :: RightLeg"));
-		}
-		else if (DamagedComponent->GetName() == "LeftLeg")
-		{
-			UE_LOG(LogTemp, Error, TEXT("Hit :: LeftLeg"));
 
-		}
-
-		//TODO Remove Logs Inside the gun 
 
 	}
 }
