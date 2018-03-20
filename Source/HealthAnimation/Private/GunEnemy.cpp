@@ -26,14 +26,12 @@ AGunEnemy::AGunEnemy()
 
 void AGunEnemy::OnFire(FHitResult& Hit)
 {
+	FVector SpawnLocation = FP_MuzzleLocation->GetComponentLocation();
 	if (ProjectileClass != NULL)
 	{
 		const FRotator SpawnRotation = FP_MuzzleLocation->GetComponentRotation();
 
 		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-
-
-		const FVector SpawnLocation = FP_MuzzleLocation->GetComponentLocation();
 
 		UWorld * const World = GetWorld();
 		if (World != NULL)
@@ -68,7 +66,8 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 	FVector CamLoc;
 	FRotator CamRot;
 	PlayerController->GetPlayerViewPoint(CamLoc, CamRot);
-	const FVector ShootDir = CamRot.Vector();
+	FVector ShootDir = CamRot.Vector();
+	ShootDir.Y += 0.2;
 	ACharacter* Pawn = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	FVector StartTrace = FVector::ZeroVector;
 	if (PlayerController)
@@ -77,7 +76,7 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 		//PlayerController->GetPlayerViewPoint(StartTrace, UnusedRot);
 
 		// Adjust trace so there is nothing blocking the ray between the camera and the pawn, and calculate distance from adjusted start
-		StartTrace = Pawn->GetActorLocation(); // StartTrace + ShootDir * ((GetActorLocation() - StartTrace) | ShootDir);
+		StartTrace = SpawnLocation; // StartTrace + ShootDir * ((GetActorLocation() - StartTrace) | ShootDir);
 	}
 
 	if (WeaponRange==0)
@@ -107,7 +106,7 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 		EndTrace,
 		FColor(255, 0, 0),
 		false, 1, 0,
-		12.333
+		4.5
 	);
 	// Check for impact
 	//const FHitResult Impact = WeaponTrace(StartTrace, EndTrace);
@@ -118,7 +117,7 @@ void AGunEnemy::OnFire(FHitResult& Hit)
 
 	if(DamagedActor == NULL)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Noooothing"));
+
 	}
 
 	// If we hit an actor, with a component that is simulating physics, apply an impulse
